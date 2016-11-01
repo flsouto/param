@@ -10,7 +10,7 @@ class ParamContext extends \ArrayObject{
 		if($param instanceof Param){
 			// ...
 		} else if(is_string($param)) {
-			if(isset($this->params($param))){
+			if(isset($this->params[$param])){
 				return $this->params[$param];
 			}
 			$param = new Param($param);
