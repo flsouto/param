@@ -1,0 +1,21 @@
+{
+    "name": "flsouto/param",
+    "description": "Cool API for validating and filtering any source of input",
+    "type": "library",
+    "require": {
+        "flsouto/pipe": "^1.0"
+    },
+    "authors": [
+        {
+            "name": "Fabio Souto",
+            "email": "fabiolimasouto@gmail.com"
+        }
+    ],
+    "keywords" : ["input","data","filtering","validation","forms","processing"],
+    "autoload" : {
+        "psr-0" : {
+            "FlSouto\\" : "."
+        }
+    },
+    "minimum-stability": "dev"
+}
