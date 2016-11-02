@@ -85,6 +85,12 @@ class ParamTest extends TestCase{
 	}
 
 	function testFilters(){
+		$filters = Param::get('name')
+			->filters()
+				->trim()
+				->required();
+
+		$this->assertInstanceOf("FlSouto\\ParamFilters", $filters);
 
 	}
 
