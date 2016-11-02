@@ -6,10 +6,14 @@ class Param{
 
 	protected $name;
 	protected static $registry = [];
+	protected static $setup = null;
 
 	function __construct($name){
 		$this->name = $name;
 		self::$registry[$name] = $this;
+		if(self::$setup){
+			call_user_func(self::$setup, $this);
+		}
 	}
 
 	function name(){
@@ -21,6 +25,10 @@ class Param{
 			return self::$registry[$name];
 		}
 		return new self($name);
+	}
+
+	static function setup(callable $callback){
+		self::$setup = $callback;
 	}
 
 	protected $pipe = null;

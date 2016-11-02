@@ -84,6 +84,19 @@ class ParamTest extends TestCase{
 		$this->assertEquals('pt', $result->output);
 	}
 
+	function testSetup(){
+		Param::setup(function(Param $param){
+			$param->context($_REQUEST)->filters()->trim();
+		});
+
+		$_REQUEST = ['name'=>'Fabio ','age'=>' 666 '];
+
+		$name = Param::get('name')->process()->output;
+		$age = Param::get('age')->process()->output;
+
+		$this->assertEquals("$name is $age years old", "Fabio is 666 years old");
+	}
+
 	function testFilters(){
 		$filters = Param::get('name')
 			->filters()
