@@ -91,10 +91,10 @@ class ParamTest extends TestCase{
 
 		$_REQUEST = ['name'=>'Fabio ','age'=>' 666 '];
 
-		$name = Param::get('name')->process()->output;
-		$age = Param::get('age')->process()->output;
+		$name = (new Param('name'))->process()->output;
+		$age = (new Param('age'))->process()->output;
 
-		$this->assertEquals("$name is $age years old", "Fabio is 666 years old");
+		$this->assertEquals("Fabio is 666 years old", "$name is $age years old");
 	}
 
 	function testFilters(){
