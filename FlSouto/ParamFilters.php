@@ -4,13 +4,13 @@ namespace FlSouto;
 
 class ParamFilters{
 
-	static $errmsg_required = '';
-	static $errmsg_maxlen = '';
-	static $errmsg_minlen = '';
-	static $errmsg_maxval = '';
-	static $errmsg_minval = '';
-	static $errmsg_ifmatch = '';
-	static $errmsg_ifnot = '';
+	static $errmsg_required = 'This field is required';
+	static $errmsg_maxlen = 'This field cannot have more than %d characters.';
+	static $errmsg_minlen = 'This field cannot have less than %d characters.';
+	static $errmsg_maxval = 'This field cannot contain a value grater than %d.';
+	static $errmsg_minval = 'This field cannot contain a value lower than %d.';
+	static $errmsg_ifmatch = 'The value supplied to this field is invalid.';
+	static $errmsg_ifnot = 'The value supplied to this field is invalid.';
 
 	protected $param;
 	function __construct(Param $param){
