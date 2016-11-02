@@ -62,6 +62,25 @@ class ParamContextTest extends TestCase{
 
 	}
 
+	function testValidationErrors(){
+
+		$context = new ParamContext();
+		$required = function($value){
+			if(empty($value)){
+				echo "Cannot be empty";
+			}
+		};
+
+		$context->param('user_id')->pipe()->add($required);
+		$context->param('user_name')->pipe()->add($required);
+
+		$result = $context->process();
+
+		$this->assertEquals(['user_id'=>"Cannot be empty",'user_name'=>"Cannot be empty"], $result->errors);
+		
+	}
+
+
 }
 
 
