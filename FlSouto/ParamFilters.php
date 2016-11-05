@@ -38,7 +38,7 @@ class ParamFilters{
 	}
 
 	protected function isEmpty($value){
-		return is_null($value) || $value=='';
+		return is_null($value) || $value==='';
 	}
 
 	function required($errmsg=''){
