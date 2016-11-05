@@ -37,11 +37,15 @@ class ParamFilters{
 		return $this;
 	}
 
+	protected function isEmpty($value){
+		return is_null($value) || $value=='';
+	}
+
 	function required($errmsg=''){
 		$errmsg = $errmsg ?: self::$errmsg_required;
-		$this->param->pipe()->add(function($value) use($message){
-			if(empty($value)){
-				echo $message;
+		$this->param->pipe()->add(function($value) use($errmsg){
+			if($this->isEmpty($value)){
+				echo $errmsg;
 			}
 		});
 		return $this;
@@ -53,6 +57,9 @@ class ParamFilters{
 			$pattern = "/$pattern/";
 		}
 		$this->param->pipe()->add(function($value) use($pattern, $errmsg){
+			if($this->isEmpty($value)){
+				return;
+			}
 			if(preg_match($pattern,$value)){
 				echo $errmsg;
 			}
@@ -66,6 +73,9 @@ class ParamFilters{
 			$pattern = "/$pattern/";
 		}
 		$this->param->pipe()->add(function($value) use($pattern, $errmsg){
+			if($this->isEmpty($value)){
+				return;
+			}
 			if(!preg_match($pattern,$value)){
 				echo $errmsg;
 			}
@@ -76,6 +86,9 @@ class ParamFilters{
 	function maxlen($maxlen, $errmsg=''){
 		$errmsg = $errmsg ?: self::$errmsg_maxlen;
 		$this->param->pipe()->add(function($value) use($maxlen, $errmsg){
+			if($this->isEmpty($value)){
+				return;
+			}
 			if(function_exists('mb_strlen')){
 				$length = mb_strlen($value);
 			} else {
@@ -91,6 +104,9 @@ class ParamFilters{
 	function minlen($minlen, $errmsg=''){
 		$errmsg = $errmsg ?: self::$errmsg_minlen;
 		$this->param->pipe()->add(function($value) use($minlen, $errmsg){
+			if($this->isEmpty($value)){
+				return;
+			}
 			if(function_exists('mb_strlen')){
 				$length = mb_strlen($value);
 			} else {
@@ -106,6 +122,9 @@ class ParamFilters{
 	function maxval($maxval, $errmsg=''){
 		$errmsg = $errmsg ?: self::$errmsg_maxval;
 		$this->param->pipe()->add(function($value) use($maxval,$errmsg){
+			if($this->isEmpty($value)){
+				return;
+			}
 			if($value > $maxval){
 				printf($errmsg,$maxval);
 			}
@@ -116,6 +135,9 @@ class ParamFilters{
 	function minval($minval, $errmsg=''){
 		$errmsg = $errmsg ?: self::$errmsg_minval;
 		$this->param->pipe()->add(function($value) use($minval,$errmsg){
+			if($this->isEmpty($value)){
+				return;
+			}
 			if($value < $minval){
 				printf($errmsg,$minval);
 			}
