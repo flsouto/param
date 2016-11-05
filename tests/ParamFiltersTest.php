@@ -135,21 +135,53 @@ class ParamFiltersTest extends TestCase{
 			->process(['description'=>str_repeat('lorem ipsum', 10)])
 			->error;
 
-		$this->assertContains("Description", $error);
+		$this->assertContains("less than 30", $error);
 	}
 
 	function testMinlen(){
 
-		#mdx:minlen
 		Param::get('description')->filters()->minlen(10, "Description must be at least %d characters long!");
+
+		$error = Param::get('description')->process(['description'=>'Test'])->error;
+
+		$this->assertContains('at least 10', $error);
+
+	}
+
+	function testMinlenRunOnlyIfNotEmpty(){
+
+		Param::get('description')->filters()->minlen(10, "Description must be at least %d characters long!");
+
+		$error = Param::get('description')->process(['description'=>''])->error;
+
+		$this->assertNull($error);
 
 	}
 
 	function testMaxval(){
-		
+
+		Param::get('age')->filters()->maxval(150, "Age cannot be more than %d!");
+		$error = Param::get('age')->process(['age'=>200])->error;
+
+		$this->assertContains("more than 150", $error);
 	}
 
 	function testMinval(){
+
+		Param::get('age')->filters()->minval(1, "Age cannot be less than %d!");
+		$error = Param::get('age')->process(['age'=>0])->error;
+
+		$this->assertContains("less than 1", $error);
+
+	}
+
+	function testMinvalRunsOnlyIfNotEmpty(){
+
+		Param::get('age')->filters()->minval(1, "Age cannot be less than %d!");
+		$error = Param::get('age')->process(['age'=>null])->error;
+
+		$this->assertNull($error);
+
 	}
 
 }
