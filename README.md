@@ -685,7 +685,7 @@ $result = Param::get('number')->process([
 var_dump($result->output);
 ```
 
-In the example above will be filtered before the validation constraints and thus will pass them, resulting in the following output:
+In the example above the data will be filtered before the validation constraints and the result will be:
 
 ```
 string(9) "203401080"
