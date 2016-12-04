@@ -22,18 +22,22 @@ class ParamFilters{
 		return $this;
 	}
 
-	function strip($pattern){
-		$this->replace($pattern,"");
+	function strip($str_or_pattern){
+		$this->replace($str_or_pattern,"");
 		return $this;
 	}
 
-	function replace($pattern, $replacement){
-		if(substr($pattern,0,1)!='/'){
-			$pattern = "/$pattern/";
+	function replace($str_or_pattern, $replacement){
+		if(substr($str_or_pattern,0,1)=='/'){
+			$function = function($value) use($str_or_pattern, $replacement){
+				return preg_replace($str_or_pattern, $replacement, $value);
+			};
+		} else {
+			$function = function($value) use($str_or_pattern, $replacement){
+				return str_replace($str_or_pattern, $replacement, $value);
+			};
 		}
-		$this->param->pipe()->add(function($value) use($pattern, $replacement){
-			return preg_replace($pattern, $replacement, $value);
-		});
+		$this->param->pipe()->add($function);
 		return $this;
 	}
 

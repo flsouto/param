@@ -42,21 +42,47 @@ Removes espaces from start and end of a string.
 	}
 
 /*
+
 ### replace
 
-Matches a regular expression and replace the match with another string.
+The replace filter allows you to replace one string with another, similar to php's str_replace function:
+
+#mdx:replace_no_regex -php -h:autoload
+
+#mdx:replace_no_regex -o
+
+*/
+
+	function testReplaceWihtoutRegex(){
+		#mdx:replace_no_regex
+		Param::get('money')
+			->context(['money'=>'3,50'])
+			->filters()
+			->replace(',','.');
+
+		$output = Param::get('money')->process()->output;
+		#/mdx var_dump($output)
+		$this->assertEquals('3.50', $output);
+
+	}
+
+/*
+
+#### replace using regex
+
+If you wrap the search pattern between two slashes, a regular expression will be assumed.
 
 #mdx:replace -php -h:autoload
 
 #mdx:replace -o
 
 */
-	function testReplace(){
+	function testReplaceWithRegex(){
 		#mdx:replace
 		Param::get('file_name')
 			->context(['file_name'=>'My  untitled document.pdf'])	
 			->filters()
-			->replace('\s+', '-');
+			->replace('/\s+/', '-');
 
 		$output = Param::get('file_name')->process()->output;
 		#/mdx var_dump($output)
@@ -64,7 +90,7 @@ Matches a regular expression and replace the match with another string.
 	}
 
 /*
-If you wrap the search pattern between two slashes, you can then specify modifiers:
+Another example using regex with the "i" modifier:
 
 #mdx:replaceWithModifiers -php -h:autoload
 
@@ -88,7 +114,7 @@ If you wrap the search pattern between two slashes, you can then specify modifie
 /*
 ### strip
 
-Matches a pattern and remove it from the string:
+Matches a string or a regex pattern and remove it from the string:
 
 #mdx:strip -php -h:autoload
 
@@ -97,12 +123,19 @@ Matches a pattern and remove it from the string:
 
 	function testStrip(){
 		#mdx:strip
-		Param::get('name')->filters()->strip('[^\d]');
+		Param::get('name')->filters()->strip('/[^\d]/');
 
 		$result = Param::get('name')->process(['name'=>'f4b10']);
 		#/mdx var_dump($result->output)
 		$this->assertEquals('410', $result->output);
 	}
+
+	function testStripWithoutRegex(){
+		$param = (new Param('name'))->filters()->strip('*');
+		$result = Param::get('name')->process(['name'=>'f4b*10']);
+		$this->assertEquals('f4b10', $result->output);
+	}
+
 /*
 ### required
 
@@ -364,7 +397,7 @@ In the example above the data will be filtered before the validation constraints
 		#mdx:chaining
 		Param::get('number')
 			->filters()
-				->strip('[^\d]')
+				->strip('/[^\d]/')
 				->required()
 				->minlen(5)
 				->maxlen(10);

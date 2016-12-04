@@ -346,9 +346,34 @@ string(5) "maria"
 ```
 
 
+
 ### replace
 
-Matches a regular expression and replace the match with another string.
+The replace filter allows you to replace one string with another, similar to php's str_replace function:
+
+```php
+use FlSouto\Param;
+
+Param::get('money')
+	->context(['money'=>'3,50'])
+	->filters()
+	->replace(',','.');
+
+$output = Param::get('money')->process()->output;
+
+var_dump($output);
+```
+
+```
+string(4) "3.50"
+
+```
+
+
+
+#### replace using regex
+
+If you wrap the search pattern between two slashes, a regular expression will be assumed.
 
 ```php
 use FlSouto\Param;
@@ -356,7 +381,7 @@ use FlSouto\Param;
 Param::get('file_name')
 	->context(['file_name'=>'My  untitled document.pdf'])	
 	->filters()
-	->replace('\s+', '-');
+	->replace('/\s+/', '-');
 
 $output = Param::get('file_name')->process()->output;
 
@@ -369,7 +394,7 @@ string(24) "My-untitled-document.pdf"
 ```
 
 
-If you wrap the search pattern between two slashes, you can then specify modifiers:
+Another example using regex with the "i" modifier:
 
 ```php
 use FlSouto\Param;
@@ -392,12 +417,12 @@ string(12) "under_scores"
 
 ### strip
 
-Matches a pattern and remove it from the string:
+Matches a string or a regex pattern and remove it from the string:
 
 ```php
 use FlSouto\Param;
 
-Param::get('name')->filters()->strip('[^\d]');
+Param::get('name')->filters()->strip('/[^\d]/');
 
 $result = Param::get('name')->process(['name'=>'f4b10']);
 
@@ -673,7 +698,7 @@ use FlSouto\Param;
 
 Param::get('number')
 	->filters()
-		->strip('[^\d]')
+		->strip('/[^\d]/')
 		->required()
 		->minlen(5)
 		->maxlen(10);

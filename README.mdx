@@ -1,0 +1,158 @@
+## ParamFilters
+
+The Param class has an instance method `filters` which returns an instance of `ParamFilters`. 
+This class makes the process of filtering and validating data much easier.
+
+The following sections are dedicated to showing the usage of each method in that object.
+
+
+### trim
+Removes espaces from start and end of a string.
+
+#mdx:trim
+#mdx:trim -o
+
+
+
+### replace
+
+The replace filter allows you to replace one string with another, similar to php's str_replace function:
+
+#mdx:replace_no_regex -php -h:autoload
+
+#mdx:replace_no_regex -o
+
+
+
+#### replace using regex
+
+If you wrap the search pattern between two slashes, a regular expression will be assumed.
+
+#mdx:replace -php -h:autoload
+
+#mdx:replace -o
+
+
+Another example using regex with the "i" modifier:
+
+#mdx:replaceWithModifiers -php -h:autoload
+
+#mdx:replaceWithModifiers -o
+
+
+### strip
+
+Matches a string or a regex pattern and remove it from the string:
+
+#mdx:strip -php -h:autoload
+
+#mdx:strip -o
+
+### required
+
+Makes sure the value is not empty. If empty, an error message is produced. 
+
+#mdx:required -php -h:autoload
+
+#mdx:required -o
+
+All validators have default error messages that can be customized. 
+Bellow is an example of redefining the default error message:
+
+#mdx:required2 -php -h:autoload
+
+#mdx:required2 -o
+
+### ifmatch
+
+Produces an error when the string MATCHES A PATTERN:
+
+#mdx:ifmatch -php -h:autoload
+
+#mdx:ifmatch -o
+
+Another example using regex modifiers:
+
+#mdx:ifmatch2 -php -h:autoload
+
+#mdx:ifmatch2 -o
+
+***Notice***: This validator is only applied when the value is not empty:
+
+#mdx:ifmatch3 -php -h:autoload
+
+#mdx:ifmatch3 -o
+
+If you want to make sure the value is not empty use the `required` filter before `ifmatch`.
+
+
+### ifnot
+
+Produces an error when the string DOES NOT MATCH a pattern:
+
+#mdx:ifnot -php -h:autoload
+
+#mdx:ifnot -o
+
+***Notice***: This validator is only applied when the value is not empty:
+
+#mdx:ifnot2 -php -h:autoload
+
+#mdx:ifnot2 -o
+
+### maxlen
+
+Makes sure the length of the string doesn't exceed a maximum:
+
+#mdx:maxlen -php -h:autoload
+
+#mdx:maxlen -o
+
+
+### minlen
+
+Makes sure the length of a string is at least certain characters long:
+
+#mdx:minlen -php -h:autoload
+
+#mdx:minlen -o
+
+***Notice***: This validator is only applied when the value is not empty:
+
+#mdx:minlen2 -php -h:autoload
+
+#mdx:minlen2 -o
+
+### maxval
+
+Makes sure an integer is not more than certain value:
+
+#mdx:maxval -php -h:autoload
+
+#mdx:maxval -o
+
+### minval
+
+Makes sure the integer, if provided, is at least larger than X:
+
+#mdx:minval -php -h:autoload
+
+#mdx:minval -o
+
+
+***Notice***: This validator is only applied when the value is not empty:
+
+#mdx:minval2 -php -h:autoload
+
+#mdx:minval2 -o
+
+### Chaining filters 
+
+Last but not least, you can use method chaning for adding multiple filters.
+The filters will be applied to the value in the same order they were added:
+
+#mdx:chaining
+
+In the example above the data will be filtered before the validation constraints and the result will be:
+
+#mdx:chaining -o
