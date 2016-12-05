@@ -55,35 +55,53 @@ class ParamFilters{
 		return $this;
 	}
 
-	function ifmatch($pattern, $errmsg=''){
+	function ifmatch($str_or_pattern, $errmsg=''){
 		$errmsg = $errmsg ?: self::$errmsg_ifmatch;
-		if(substr($pattern,0,1)!='/'){
-			$pattern = "/$pattern/";
+		if(substr($str_or_pattern,0,1)=='/'){
+			$function = function($value) use($str_or_pattern, $errmsg){
+				if($this->isEmpty($value)){
+					return;
+				}
+				if(preg_match($str_or_pattern,$value)){
+					echo $errmsg;
+				}
+			};
+		} else {
+			$function = function($value) use($str_or_pattern, $errmsg){
+				if($this->isEmpty($value)){
+					return;
+				}
+				if(strstr($value, $str_or_pattern)){
+					echo $errmsg;
+				}
+			};
 		}
-		$this->param->pipe()->add(function($value) use($pattern, $errmsg){
-			if($this->isEmpty($value)){
-				return;
-			}
-			if(preg_match($pattern,$value)){
-				echo $errmsg;
-			}
-		});
+		$this->param->pipe()->add($function);
 		return $this;
 	}
 
-	function ifnot($pattern, $errmsg=''){
+	function ifnot($str_or_pattern, $errmsg=''){
 		$errmsg = $errmsg ?: self::$errmsg_ifnot;
-		if(substr($pattern,0,1)!='/'){
-			$pattern = "/$pattern/";
+		if(substr($str_or_pattern,0,1)=='/'){
+			$function = function($value) use($str_or_pattern, $errmsg){
+				if($this->isEmpty($value)){
+					return;
+				}
+				if(!preg_match($str_or_pattern,$value)){
+					echo $errmsg;
+				}
+			};
+		} else {
+			$function = function($value) use($str_or_pattern, $errmsg){
+				if($this->isEmpty($value)){
+					return;
+				}
+				if(!strstr($value, $str_or_pattern)){
+					echo $errmsg;
+				}
+			};
 		}
-		$this->param->pipe()->add(function($value) use($pattern, $errmsg){
-			if($this->isEmpty($value)){
-				return;
-			}
-			if(!preg_match($pattern,$value)){
-				echo $errmsg;
-			}
-		});
+		$this->param->pipe()->add($function);
 		return $this;
 	}
 

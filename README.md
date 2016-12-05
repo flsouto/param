@@ -488,7 +488,7 @@ use FlSouto\Param;
 
 Param::get('name')
 	->filters()
-	->ifmatch('\d', 'Name cannot contain digits');
+	->ifmatch('/\d/', 'Name cannot contain digits');
 
 $error = Param::get('name')->process(['name'=>'M4ry'])->error;
 

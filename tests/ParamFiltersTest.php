@@ -190,13 +190,24 @@ Produces an error when the string MATCHES A PATTERN:
 		#mdx:ifmatch
 		Param::get('name')
 			->filters()
-			->ifmatch('\d', 'Name cannot contain digits');
+			->ifmatch('/\d/', 'Name cannot contain digits');
 
 		$error = Param::get('name')->process(['name'=>'M4ry'])->error;
 		#/mdx var_dump($error)
 		$this->assertEquals("Name cannot contain digits", $error);
 
 	}
+
+	function testIfmatchWithoutRegex(){
+		Param::get('email_address')
+			->filters()
+			->ifmatch('?', 'Email cannot contain interrogation marks!');
+
+		$error = Param::get('email_address')->process(['email_address'=>'myemail?@domain.com'])->error;
+		$this->assertContains("marks!", $error);
+
+	}
+
 /*
 Another example using regex modifiers:
 
@@ -262,6 +273,17 @@ Produces an error when the string DOES NOT MATCH a pattern:
 
 #mdx:ifnot2 -o
 */
+
+	function testIfnotWithoutRegex(){
+		
+		(new Param('email'))->filters()->ifnot('@', 'Email address should contain a @');
+
+		$error = Param::get('email')->process(['email'=>'myemail.domain.com'])->error;
+
+		$this->assertContains('should', $error);
+
+	}
+
 	function testIfnotRunsOnlyIfNotEmpty(){
 		#mdx:ifnot2
 		Param::get('login')->filters()->ifnot('\w','Login must contain at least one letter');
