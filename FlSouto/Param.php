@@ -47,8 +47,8 @@ class Param{
 		return $this->filters;
 	}
 
-	function fallback($value){
-		$this->pipe()->fallback($value);
+	function fallback($value, $when=[null]){
+		$this->pipe()->fallback($value, $when);
 		return $this;
 	}
 
