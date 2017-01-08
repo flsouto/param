@@ -114,6 +114,34 @@ en
 Furthermore, you can work with the `ParamContext` class which allows you to factory parameters from a predefined context. Read more about it on the "ParamContext" section.
 
 
+#### Namespaced Params
+
+You can use square brackets for a fully qualified name. 
+In the following example, the parameter 'email' is found inside the hierarchy user > contact:
+
+```php
+use FlSouto\Param;
+
+$param = Param::get('user[contact][email]');
+$param->context([
+	'user' => [
+		'contact' => [
+			'email' => 'user@domain.com'
+		]
+	]
+]);
+$result = $param->process();
+
+echo $result->output;
+```
+
+The output of the above will be:
+
+```
+user@domain.com
+```
+
+
 ### Validation
 
 The param object uses an instance of the [Pipe](https://github.com/flsouto/pipe) class
