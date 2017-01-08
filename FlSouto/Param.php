@@ -48,6 +48,7 @@ class Param{
 	}
 
 	function fallback($value, $when=[null]){
+		$this->fallback = $value;
 		$this->pipe()->fallback($value, $when);
 		return $this;
 	}
@@ -56,6 +57,27 @@ class Param{
 	function context($data){
 		$this->context = $data;
 		return $this;
+	}
+
+	function defined(){
+		$context = $this->context;
+		if(empty($context)){
+			return false;
+		}
+		if(strpos($this->name,'[')!==FALSE){
+			// ex: product[info][name]
+			foreach(explode('[', $this->name) as $part){
+				$part = rtrim($part,']');
+				if(isset($context[$part])){
+					$context = $context[$part];
+				} else {
+					return false;
+				}
+			}
+			return true;
+		} else {
+			return isset($context[$this->name]);
+		}		
 	}
 
 	function process($context = null){

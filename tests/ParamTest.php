@@ -281,6 +281,20 @@ Last but not least, all setters of the Param class return the instance itself, s
 
 	}
 
+	function testDefined(){
+		$key = uniqid();
+		$param = Param::get($key);
+		$param->context([$key=>'teste']);
+		$this->assertTrue($param->defined());
+		$param->context([]);
+		$this->assertFalse($param->defined());
+		$param = Param::get("name[spaced][$key]");
+		$param->context(["name"=>["spaced"=>[$key=>1]]]);
+		$this->assertTrue($param->defined());
+		$param->context(["name"=>["spaced"=>['another_key'=>1]]]);
+		$this->assertFalse($param->defined());
+	}
+
 }
 
 
