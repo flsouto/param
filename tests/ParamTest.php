@@ -126,6 +126,34 @@ Furthermore, you can work with the `ParamContext` class which allows you to fact
 	}
 
 /*
+#### Namespaced Params
+
+You can use square brackets for a fully qualified name. 
+In the following example, the parameter 'email' is found inside the hierarchy user > contact:
+
+#mdx:processingWithNs -php -h:autoload
+
+The output of the above will be:
+
+#mdx:processingWithNs -o
+
+*/
+	function testProcessingWithNamespace(){
+		#mdx:processingWithNs
+		$param = Param::get('user[contact][email]');
+		$param->context([
+			'user' => [
+				'contact' => [
+					'email' => 'user@domain.com'
+				]
+			]
+		]);
+		$result = $param->process();
+		#/mdx echo $result->output
+		$this->assertEquals('user@domain.com', $result->output);
+	}
+
+/*
 ### Validation
 
 The param object uses an instance of the [Pipe](https://github.com/flsouto/pipe) class

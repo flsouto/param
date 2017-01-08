@@ -60,7 +60,23 @@ class Param{
 
 	function process($context = null){
 		$context = !is_null($context) ? $context : $this->context;
-		$value = isset($context[$this->name]) ? $context[$this->name] : null;
+
+		if(strpos($this->name,'[')!==FALSE){
+			// ex: product[info][name]
+			foreach(explode('[', $this->name) as $part){
+				$part = rtrim($part,']');
+				if(isset($context[$part])){
+					$context = $context[$part];
+				} else {
+					$value = null;
+					break;
+				}
+			}
+			$value = $context;
+		} else {
+			$value = isset($context[$this->name]) ? $context[$this->name] : null;
+		}
+
 		return $this->pipe()->run($value);
 	}
 
