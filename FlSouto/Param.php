@@ -87,14 +87,18 @@ class Param{
 			// ex: product[info][name]
 			foreach(explode('[', $this->name) as $part){
 				$part = rtrim($part,']');
+				$notset = false;
 				if(isset($context[$part])){
 					$context = $context[$part];
 				} else {
+					$notset = true;
 					$value = null;
 					break;
 				}
 			}
-			$value = $context;
+			if(!$notset){
+				$value = $context;				
+			}
 		} else {
 			$value = isset($context[$this->name]) ? $context[$this->name] : null;
 		}
